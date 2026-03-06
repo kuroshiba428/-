@@ -208,10 +208,11 @@ function getBiasExplanation(biasFull) {
         "メタ認知機能（客観的に自分の状況を分析、把握する能力）": "メタ認知機能"
     };
     return biasNames[biasFull] || biasFull.split('（')[0] || "詳細な心理分析";
-}// ここで関数終了
+}
 
-    ===== タイプ定義（省略せずコピー） =====
+
 const TYPES = [
+
 {id:1, name:"馬鹿の山マネージャー", catchphrase:"「俺が言ってるんだよ？」", icon:"🐒🏔", bias:`ダニング＝クルーガー効果（能力が低いほど自己評価が過大になる認知バイアス）`, description:`このタイプは、自信と実力のバランスが崩れており、能力より自己評価が大きく上回る傾向があります。
 
 特徴は
@@ -225,7 +226,8 @@ const TYPES = [
 結果として
 ミス → 謝罪 → 再発 → 謝罪
 というループが発生します。`},
-{id:3, name:"「大人な対応」上司", catchphrase:"もしかして：責任者　不在", icon:"👈👉", bias:`責任分散（集団の中で、それぞれの認識意識が薄れる心理）`, description:`このタイプは問題が発生した際、
+
+    {id:3, name:"「大人な対応」上司", catchphrase:"もしかして：責任者　不在", icon:"👈👉", bias:`責任分散（集団の中で、それぞれの認識意識が薄れる心理）`, description:`このタイプは問題が発生した際、
 • チーム全体
 • 他の部署の役割
 • 私生活の状況
@@ -233,21 +235,22 @@ const TYPES = [
 などに責任を分散させ、明確な責任主体が消える構造を作りがちです。
 
 一見すると事態を丸く収めたように見えますが、結果として、問題の解決が遅れます。`},
+
 {id:4, name:"記憶改竄マネージャー", catchphrase:"「そんなこと言ってないよ、聞き間違えじゃない？」", icon:"❓❓", bias:`認知的不協和（「できる自分」のイメージと合わない情報が受け入れられないから「現実」を変えてしまう心理）`, description:`このタイプは、自分の発言や判断が現実と矛盾したとき、
 無意識に過去の発言を修正してしまう傾向があります。
 
 本人に悪意がない場合も多いですが、
 部下の混乱や自信喪失、チームの信頼関係の喪失につながる場合があります。
 `},
+    
 {id:5, name:"人格攻撃型マネージャー", catchphrase:"気にしすぎ？怒りすぎ？", icon:"😡🗯️", bias:`根本的帰属の誤り（個人の性格の問題として整理し、本質（自分のマネジメント問題）に気づかない認知バイアス）`, description:`このタイプは、問題が起きると 
 • 性格 
 • 協調性 
 • 感情 など、
 個人の人格に原因を求める傾向があります。 
 これにより、構造的な問題が見えにくくなるだけでなく、
-人格否定によりチーム関係が悪化する場合があります。
-
-`},
+人格否定によりチーム関係が悪化する場合があります。`},
+    
 {id:6, name:"またまたたまたま上司", catchphrase:"この「イレギュラー」、何回目？", icon:"🎲🎲", bias:`正常性バイアス（異常を「いつも通り」とみなし、深刻さが認められない認知バイアス）`, description:`このタイプは、同じ問題が繰り返されても
  「今回はたまたま」 「偶然」 と扱うことで、
 問題のパターン認識が起こらない特徴があります。
@@ -255,6 +258,7 @@ const TYPES = [
 その結果、根本的問題の解決につながらず、
 同じミスやトラブルが生じる場合があります。
 `},
+    
 {id:7, name:"くちだけ神上司", catchphrase:"声は聞こえるが姿が見えない…", icon:"👼👼", bias:`モラルライセンシング（良いことを言えば行動しなくても良いという自己免罪心理）`, description:`このタイプは、
  「心配している」
  「サポートしたい」
@@ -265,6 +269,7 @@ const TYPES = [
 その結果、根本的問題の解決につながらず、
 同じミスやトラブルが生じる場合があります。
 `},
+    
 {id:8, name:"謎にどっしりマネージャー", catchphrase:"焦ってないけど、大丈夫そう？", icon:"🚬😎", bias:`単純化バイアス（複雑な問題を処理したがらず、単純なものと扱ってしまう認知バイアス）`, description:`このタイプは、組織の問題を 
 • 小さな出来事 
 • 一時的トラブル 
@@ -443,19 +448,22 @@ const typeMap = [
         </div>`;
 
    // タイプ詳細
+// 詳細表示
 topTypes.forEach(type => {
-    html += `
-        <div class="type">
-            <h2><span class="type-icon">${type.icon}</span>${type.name}</h2>
-            <p class="description">${type.description}</p>
-            <div class="psych-analysis">
-                🧠 ヤバさの心理分析<br>
-                <strong>${getBiasExplanation(type.bias)}</strong><br>
-                <span style="font-size:0.9em;opacity:0.9;">${type.bias.split('（')[1]?.replace('）', '') || '詳細な心理分析'}</span>
-            </div>
-        </div>`;
-
-    });
+    const div = document.createElement('div');
+    div.className = 'type';
+    div.innerHTML = `
+        <h2>${type.icon} ${type.name}</h2>
+        <p><strong>キャッチフレーズ：</strong>${type.catchphrase}</p>
+        <p>${type.description}</p>
+        <div style="background:linear-gradient(90deg,#ff6b6b,#feca57);padding:15px;border-radius:15px;margin:10px 0;">
+            <strong>🧠 認知バイアス：</strong><br>
+            <span style="font-size:1.3em;">${getBiasExplanation(type.bias)}</span><br>
+            <small style="opacity:0.9;">${type.bias.split('（')[1]?.replace('）','') || '詳細分析'}</small>
+        </div>
+    `;
+    container.appendChild(div);
+});
 
     // バーチャート（全タイプのスコア）
     html += `
@@ -509,6 +517,7 @@ window.onload = getResults;
 </script>
 </body>
 </html>
+
 
 
 

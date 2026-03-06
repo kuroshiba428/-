@@ -114,6 +114,7 @@ body {
 
 .card-content ul li span.text,
 .card-content ul li .text,
+    
 .bias-display {
     display: block !important;
     white-space: pre-line;
@@ -133,12 +134,12 @@ body {
     flex-direction: column;
     gap: 4px;
 }
-
-.bias-name {
-    font-weight: 700;
-    color: #000000;
-    font-size: 1.05em;
-    display: block;
+    
+.bias-name {  ← ここ！
+    font-weight: 700 !important;
+    color: #000000 !important;  /* 変更 */
+    font-size: 1.05em !important;
+    display: block !important;
 }
 
 .bias-desc {
@@ -354,6 +355,7 @@ TYPES.forEach((type, index) => {
 </script>
 </body>
 </html>
+
 
 
 

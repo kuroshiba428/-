@@ -179,15 +179,29 @@ const TYPES = [
 ];
 
 // ===== 質問回答解析 =====
+function<script>
 function getResults() {
     const params = new URLSearchParams(window.location.search);
-    const data = JSON.parse(atob(params.get('data'))); // 30問分の回答（1-4）
+    let data;
 
-     let scores = Array(TYPES.length).fill(0);
-    
-    // 簡易計算例：各回答をタイプに加点（ここは工夫可能）
- // 各質問の回答ごとにどのタイプに点を加えるか
-// 1-4 = 選択肢番号、配列内の数字 = TYPES配列のID
+    try {
+        const encodedData = params.get('data');
+        if (!encodedData) throw new Error('dataパラメータがありません');
+        data = JSON.parse(atob(encodedData));
+        if (!Array.isArray(data) || data.length !== 30) throw new Error('回答データが不正です');
+    } catch (e) {
+        const container = document.getElementById('resultContainer');
+        const msg = document.createElement('div');
+        msg.className = 'message';
+        msg.textContent = '⚠️ 診断データが見つからないか不正です。もう一度テストを行ってください。';
+        container.appendChild(msg);
+        return;
+    }
+
+    // 1～4の範囲外を除外
+    data = data.map(a => (a >= 1 && a <= 4 ? a : null));
+
+    let scores = Array(TYPES.length).fill(0);
 const typeMap = [
   // ① 上司がミスをしました
   [[1,8],[2],[5,9],[4]],
@@ -278,7 +292,7 @@ const typeMap = [
             3位: ${topTypes[2] ? topTypes[2].name + ' ' + topTypes[2].icon : '-'}`;
         container.appendChild(rankDiv);
 
-        // 詳細表示
+                // 詳細表示
         topTypes.forEach(type => {
             const div = document.createElement('div');
             div.className = 'type';
@@ -290,19 +304,21 @@ const typeMap = [
             `;
             container.appendChild(div);
         });
-const linkDiv = document.createElement('div');
-linkDiv.style.textAlign = 'center';
-linkDiv.style.marginTop = '30px';
-linkDiv.innerHTML = `<a href="types.html" style="
-    display: inline-block;
-    padding: 12px 20px;
-    background: linear-gradient(45deg, #48bb78, #38a169);
-    color: white;
-    border-radius: 25px;
-    text-decoration: none;
-    font-weight: 600;
-">全15タイプ一覧ページを見る</a>`;
-container.appendChild(linkDiv);
+
+        // 「全15タイプ一覧ページを見る」リンク
+        const linkDiv = document.createElement('div');
+        linkDiv.style.textAlign = 'center';
+        linkDiv.style.marginTop = '30px';
+        linkDiv.innerHTML = `<a href="types.html" style="
+            display: inline-block;
+            padding: 12px 20px;
+            background: linear-gradient(45deg, #48bb78, #38a169);
+            color: white;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+        ">全15タイプ一覧ページを見る</a>`;
+        container.appendChild(linkDiv);
         
         // チャート作成
         const chartCanvas = document.createElement('canvas');
@@ -347,6 +363,4 @@ container.appendChild(linkDiv);
 // ページ読み込み時に結果を表示
 window.onload = getResults;
 </script>
-</body>
-</html>
 

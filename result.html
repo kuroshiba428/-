@@ -78,6 +78,7 @@ h1 {
 .rank-item:nth-child(3) { 
     color: #ffffff !important; /* 全員白文字 */
     font-family: inherit; /* フォント統一 */
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
 }
 
 .rank-item span:first-child {
@@ -474,7 +475,7 @@ topTypes.forEach(type => {
         div.className = 'type';
     div.innerHTML = `
         <h2>${type.icon} ${type.name}</h2>
-        <p><strong>キャッチフレーズ：</strong>${type.catchphrase}</p>
+        <p><strong>${type.catchphrase}</strong></p>
         <p>${type.description}</p>
         <div style="background:linear-gradient(90deg,#ff6b6b,#feca57);padding:15px;border-radius:15px;margin:10px 0;">
             <strong>🧠 認知バイアス：</strong><br>
@@ -536,6 +537,7 @@ window.onload = getResults;
 </script>
 </body>
 </html>
+
 
 
 

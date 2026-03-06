@@ -147,7 +147,7 @@ gap: 15px;
     margin: 10px 0 5px 0;
     color: #fff;
 }
-span[style*="font-size:1.3em"] {
+span[style*="font-size:1.0em"] {
 font-size: 1.1em !important;
 }
     
@@ -561,7 +561,7 @@ topTypes.forEach(type => {
         <p>${type.description}</p>
         <div style="background:linear-gradient(90deg,#ff6b6b,#feca57);padding:15px;border-radius:15px;margin:10px 0;">
             <strong>🧠 ヤバさの構造分析：</strong><br>
-            <span style="font-size:1.0 em;">${getBiasExplanation(type.bias)}</span><br>
+            <span style="font-size:1.0em;">${getBiasExplanation(type.bias)}</span><br>
             <small style="opacity:0.9;">${type.bias.split('（')[1]?.replace('）','') || '詳細分析'}</small>
         </div>
     `;
@@ -620,6 +620,7 @@ window.onload = getResults;
 </script>
 </body>
 </html>
+
 
 
 

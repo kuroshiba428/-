@@ -103,13 +103,22 @@ h1 {
 
 .psych-analysis {
     background: linear-gradient(90deg, #ff6b6b, #feca57);
-    padding: 15px 20px;
+    padding: 20px 25px;
     border-radius: 20px;
     margin: 20px 0;
     font-weight: 700;
     font-size: 1.1em;
     box-shadow: 0 10px 25px rgba(255,107,107,0.3);
+    line-height: 1.6;
+    text-align: left;
 }
+.psych-analysis strong {
+    display: block;
+    font-size: 1.3em;
+    margin: 10px 0 5px 0;
+    color: #fff;
+}
+
 
 .description {
     line-height: 1.7;
@@ -117,6 +126,7 @@ h1 {
 }
 
 .chart-container {
+    height: 400px;
     background: rgba(0,0,0,0.2);
     border-radius: 25px;
     padding: 20px;
@@ -157,6 +167,16 @@ h1 {
     border-radius: 25px;
     backdrop-filter: blur(10px);
 }
+ @media (max-width: 768px) {
+    .chart-container {
+        padding: 10px !important;
+        margin: 15px 0 !important;
+    }
+    .chart-container canvas {
+        max-height: 300px !important;
+    }
+}
+   
 </style>
 </head>
 <body>
@@ -165,7 +185,26 @@ h1 {
 </div>
     
 <script>
-// ===== タイプ定義（省略せずコピー） =====
+function getBiasExplanation(biasName) {
+    const explanations = {
+        "ダニング＝クルーガー効果": "能力が低いほど自己評価が過大になる認知バイアス",
+        "形式謝罪完結錯覚": "謝罪＝「問題解決・責任終了」の魔法の言葉と思いこむ認知錯覚", 
+        "責任分散": "集団の中で、それぞれの認識意識が薄れる心理",
+        "認知的不協和": "「できる自分」のイメージと合わない情報が受け入れられないから「現実」を変えてしまう心理",
+        "根本的帰属の誤り": "個人の性格の問題として整理し、本質（自分のマネジメント問題）に気づかない認知バイアス",
+        "正常性バイアス": "異常を「いつも通り」とみなし、深刻さが認められない認知バイアス",
+        "モラルライセンシング": "良いことを言えば行動しなくても良いという自己免罪心理",
+        "単純化バイアス": "複雑な問題を処理したがらず、単純なものと扱ってしまう認知バイアス",
+        "防衛機制": "自分の心を守るために、自分の非を認められない心理状況",
+        "アンカリング効果": "過去のある成功に錨（いかり）を下ろし、それが判断基準として動かなくなってしまう認知バイアス",
+        "集団同調バイアス": "周囲の期待や集団規範に合わせることを「当然」とし、明確な指示を出さず、結果として「察して」を強いる認知バイアス",
+        "コントロール幻想": "完璧主義や不安の結果、部下の行動を全て自分で管理できると錯覚し、過剰介入する認知バイアス",
+        "ホット・コグニション": "論理的思考が感情にハイジャックされてしまい、冷静な判断ができない心理状態",
+        "傍観者効果": "誰かがやってくれるだろうと考え、個々の行動意欲が低下する心理現象",
+        "メタ認知機能": "客観的に自分の状況を分析、把握する能力"
+    };
+    return explanations[biasName] || "詳細な心理分析";
+}// ===== タイプ定義（省略せずコピー） =====
 const TYPES = [
 {id:1, name:"馬鹿の山マネージャー", catchphrase:"「俺が言ってるんだよ？」", icon:"🐒🏔", bias:`ダニング＝クルーガー効果（能力が低いほど自己評価が過大になる認知バイアス）`, description:`このタイプは、自信と実力のバランスが崩れており、能力より自己評価が大きく上回る傾向があります。
 
@@ -402,9 +441,13 @@ const typeMap = [
         html += `
             <div class="type">
                 <h2><span class="type-icon">${type.icon}</span>${type.name}</h2>
-                <div class="psych-analysis">🧠 ヤバさの心理分析: ${type.bias}</div>
                 <p class="description">${type.description}</p>
-            </div>`;
+<div class="psych-analysis">
+    🧠 ヤバさの心理分析<br>
+    <strong>${getBiasExplanation(type.bias)}</strong><br>
+    <span style="font-size:0.9em;opacity:0.9;">${type.bias.split('（')[1]?.replace('）', '') || '詳細な心理分析'}</span>
+</div>
+
     });
 
     // バーチャート（全タイプのスコア）
@@ -441,14 +484,18 @@ const typeMap = [
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,  // ← これ追加！
                 scales: {
                     y: { beginAtZero: true, max: 20, ticks: { color: 'white' }, grid: { color: 'rgba(255,255,255,0.1)' } },
                     x: { ticks: { color: 'white', maxRotation: 45 } }
                 },
                 plugins: {
-                    legend: { labels: { color: 'white', font: { size: 16 } } }
-                }
-            }
+                   legend: { 
+  　　　　　　　　　  labels: { 
+     　　　　　　　　   color: 'white', 
+     　　　　　　　　   font: { size: 14 }
+    } 
+}
         });
     }, 100);
 }
@@ -457,6 +504,7 @@ window.onload = getResults;
 </script>
 </body>
 </html>
+
 
 
 

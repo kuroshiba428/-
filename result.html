@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>上司病理診断 | 結果</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    color: white;
+}
+.container {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(20px);
+    border-radius: 30px;
+    padding: 20px;
+    max-width: 700px;
+    width: 100%;
+}
+.top-rank {
+    background: rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+.top-rank h3 { margin: 5px 0; }
+.type {
+    background: rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 15px;
+    margin-bottom: 20px;
+    white-space: pre-wrap;
+}
+.type h2 { margin-bottom: 8px; font-size:1.2em; }
+.type p { margin-top: 5px; font-size:0.95em; line-height:1.5; }
+canvas {
+    margin-top: 20px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.1);
+    width: 100%;
+    height: 400px;
+    display: block;
+}
+</style>
+</head>
+<body>
+<div class="container" id="resultContainer">
+    <h1>🧠 診断結果</h1>
+</div>
+
+<script>
+// ===== タイプ定義（省略せずコピー） =====
+const TYPES = [
+{id:1, name:"馬鹿の山マネージャー", catchphrase:"「俺が言ってるんだよ？」", icon:"🐒🏔", bias:`ダニング＝クルーガー効果（能力が低いほど自己評価が過大になる認知バイアス）`, description:`このタイプは、自信と実力のバランスが崩れており、能力より自己評価が大きく上回る傾向があります。
+
+特徴は
+• 強い自信
+• フィードバック拒否
+• 過去の経験の過信
+
+本人は問題を感じていないことが多く、周囲のメンバーが修正役を担う構造になりがちです。`},
+{id:2, name:"謝罪ボタン上司", catchphrase:"その謝罪、何回目？", icon:"🙇🙇", bias:`形式謝罪完結錯覚（謝罪＝「問題解決・責任終了」の魔法の言葉と思いこむ認知錯覚）`, description:`このタイプは、問題が起きると素早く謝罪しますが、改善行動が伴わないことが多いのが特徴です。
+
+結果として
+ミス → 謝罪 → 再発 → 謝罪
+というループが発生します。`},
+{id:3, name:"「大人な対応」上司", catchphrase:"もしかして：責任者　不在", icon:"👈👉", bias:`責任分散（集団の中で、それぞれの認識意識が薄れる心理）`, description:`このタイプは問題が発生した際、
+• チーム全体
+• 他の部署の役割
+• 私生活の状況
+
+などに責任を分散させ、明確な責任主体が消える構造を作りがちです。
+
+一見すると事態を丸く収めたように見えますが、結果として、問題の解決が遅れます。`},
+{id:4, name:"記憶改竄マネージャー", catchphrase:"「そんなこと言ってないよ、聞き間違えじゃない？」", icon:"❓❓", bias:`認知的不協和（「できる自分」のイメージと合わない情報が受け入れられないから「現実」を変えてしまう心理）`, description:`このタイプは、自分の発言や判断が現実と矛盾したとき、
+無意識に過去の発言を修正してしまう傾向があります。
+
+本人に悪意がない場合も多いですが、
+部下の混乱や自信喪失、チームの信頼関係の喪失につながる場合があります。
+`},
+{id:5, name:"人格攻撃型マネージャー", catchphrase:"気にしすぎ？怒りすぎ？", icon:"😡🗯️", bias:`根本的帰属の誤り（個人の性格の問題として整理し、本質（自分のマネジメント問題）に気づかない認知バイアス）`, description:`このタイプは、問題が起きると 
+• 性格 
+• 協調性 
+• 感情 など、
+個人の人格に原因を求める傾向があります。 
+これにより、構造的な問題が見えにくくなるだけでなく、
+人格否定によりチーム関係が悪化する場合があります。
+
+`},
+{id:6, name:"またまたたまたま上司", catchphrase:"この「イレギュラー」、何回目？", icon:"🎲🎲", bias:`正常性バイアス（異常を「いつも通り」とみなし、深刻さが認められない認知バイアス）`, description:`このタイプは、同じ問題が繰り返されても
+ 「今回はたまたま」 「偶然」 と扱うことで、
+問題のパターン認識が起こらない特徴があります。
+
+その結果、根本的問題の解決につながらず、
+同じミスやトラブルが生じる場合があります。
+`},
+{id:7, name:"くちだけ神上司", catchphrase:"声は聞こえるが姿が見えない…", icon:"👼👼", bias:`モラルライセンシング（個人の性格の問題として整理し、本質（自分のマネジメント問題）に気づかない認知バイアス）`, description:`このタイプは、
+ 「心配している」
+ 「サポートしたい」
+ 「少し休んだ方がいいんじゃない？」 
+といった優しい、気遣った言葉が多いですが、
+具体的な行動が伴わない、状況変化を推し進めない傾向があります。 
+
+その結果、根本的問題の解決につながらず、
+同じミスやトラブルが生じる場合があります。
+`},
+{id:8, name:"謎にどっしりマネージャー", catchphrase:"焦ってないけど、大丈夫そう？", icon:"🚬😎", bias:`単純化バイアス（複雑な問題を処理したがらず、単純なものと扱ってしまう認知バイアス）`, description:`このタイプは、組織の問題を 
+• 小さな出来事 
+• 一時的トラブル 
+として処理することで、
+問題の全体構造を直視しない傾向があります。 
+
+その結果、根本的問題の解決につながらず、
+同じミスやトラブルが生じる場合があります。
+`},
+{id:9, name:"最強保身武装上司", catchphrase:"俺の辞書に反省という文字はない", icon:"🛡️🏰", bias:`防衛機制（自分の心を守るために、自分の非を認められない心理状況）`, description:`このタイプは、合理化、否認、投影など
+複数の心理防衛が働いており、
+自己正当化が非常に強い状態で
+何も言っても響かない傾向があります。 
+
+その結果、チーム内の信頼関係の悪化、、
+トラブル解決の遅延など、様々な問題が常態化する場合があります。
+`},
+{id:10, name:"懐古主義マネージャー", catchphrase:"エラー：バージョンが古いです。", icon:"💾💾", bias:`アンカリング効果（過去のある成功に錨（いかり）を下ろし、それが判断基準として動かなくなってしまう認知バイアス）`, description:`このタイプは、過去の成功体験が強く、
+新しい環境への適応が遅れる傾向があります。
+
+その結果、非効率運用を維持したり
+部下からの新しいアイデアを「経験」の名の下で無視し、
+業務の改善を停滞させる場合があります。
+`},
+{id:11, name:"無言の圧マネージャー", catchphrase:"「…え、常識的にわかるでしょ？」", icon:"🙊💦", bias:`集団同調バイアス（周囲の期待や集団規範に合わせることを「当然」とし、明確な指示を出さず、結果として「察して」を強いる認知バイアス）`, description:`このタイプは、 明確な指示より
+ 「察して」 「普通わかる」 といった文化を重視するため、
+責任と指示が曖昧になりがちで確認しづらい「空気」を作る傾向があります。
+
+その結果、スムーズなチームメイト同士のコミュニケーションが阻害され、
+仕事に支障が出たり、部下のストレスとなる場合があります。
+`},
+{id:12, name:"マイクロマネジメント上司", catchphrase:"マリオネット部下誕生", icon:"👁👁", bias:`コントロール幻想（完璧主義や不安の結果、部下の行動を全て自分で管理できると錯覚し、過剰介入する認知バイアス）`, description:`このタイプは、 細かい管理が多く、
+部下の裁量が少ない環境を作ります。
+
+結果として、部下のストレスの増加、自信喪失、
+育成の失敗につながる傾向があります。
+`},
+{id:13, name:"感情爆発マネージャー", catchphrase:"「俺を怒らせるんじゃない！」", icon:"🤬💥", bias:`ホット・コグニション（論理的思考が感情にハイジャックされてしまい、冷静な判断ができない心理状態）`, description:`このタイプは、問題が起きると怒りや感情で反応し、
+冷静な問題解決より感情の発散を優先する場合があります。
+
+その結果、問題の解決が図られないだけでなく
+チーム内の人間関係にも悪影響を及ぼす場合があります。
+`},
+{id:14, name:"透明人間マネージャー", catchphrase:"「信頼してるよ、よろしくね」", icon:"👋😶‍🌫️", bias:`傍観者効果（誰かがやってくれるだろうと考え、個々の行動意欲が低下する心理現象）`, description:`このタイプは、一見自由な環境に見えるものの 
+• 意思決定がない 
+• 仕事へのサポートがない 
+• 責任も曖昧 
+という状態に陥りやすく、 その結果、
+様々問題が常態化する場合があります。
+`},
+{id:15, name:"健全マネージャー", catchphrase:"安心安全上司", icon:"💮💯", bias:`メタ認知機能（客観的に自分の状況を分析、把握する能力）`, description:`このタイプは 
+• フィードバック受容 
+• 問題構造化 
+• 改善行動 
+を比較的バランスよく行います。
+組織にとって安定したマネジメントと言えます。
+
+`}
+
+];
+
+// ===== 質問回答解析 =====
+function getResults() {
+    const params = new URLSearchParams(window.location.search);
+    let data;
+
+    try {
+        const encodedData = params.get('data');
+        if (!encodedData) throw new Error('dataパラメータがありません');
+        data = JSON.parse(atob(encodedData));
+        if (!Array.isArray(data) || data.length !== 30) throw new Error('回答データが不正です');
+    } catch (e) {
+        alert('診断データが見つからないか不正です。ダミーデータを使用します。');
+        data = Array(30).fill(1); // デフォルトのダミーデータ
+    }
+
+    let scores = Array(TYPES.length).fill(0);
+
+    const typeMap = [
+        [[1,8],[2],[5,9],[4]], [[1,6],[2],[6,3],[4,10]], [[3],[5],[3,6],[5,13]],
+        [[1],[2],[3],[4]], [[1,8],[2],[4],[5]], [[4],[2],[3],[4,10]],
+        [[1,8],[2],[3,6],[4,10]], [[3],[7],[12],[5]], [[3,15],[7],[10],[4]],
+        [[1],[1,2],[9],[15]], [[15],[10],[3,11],[4]], [[15],[3],[3,6],[4]],
+        [[1],[6],[3,6],[4]], [[15],[5],[3],[5]], [[15],[2],[6],[4]],
+        [[1,10],[2],[6],[4]], [[1,8],[2],[3,6],[4]], [[15],[7],[12],[5]],
+        [[15],[7],[11],[5,13]], [[15],[7],[12],[4]], [[15],[7],[3,6],[5,13]],
+        [[15],[7],[3],[4]], [[15],[2],[10],[4]], [[1,6],[2],[6,3],[4]],
+        [[15],[10],[3],[4]], [[15],[2],[9],[4]], [[15],[7],[11],[5]],
+        [[15],[7],[10],[4]], [[15],[11],[12],[4]], [[1],[2],[9],[5]]
+    ];
+
+    data.forEach((answer, idx) => {
+        typeMap[idx][answer-1].forEach(typeId => {
+            scores[typeId-1] += 1;
+        });
+    });
+
+    const topTypes = scores
+        .map((score, idx) => ({...TYPES[idx], score}))
+        .sort((a,b) => b.score - a.score)
+        .slice(0,3);
+
+    const container = document.getElementById('resultContainer');
+
+    // 上位3タイプ表示
+    const rankDiv = document.createElement('div');
+    rankDiv.className = 'top-rank';
+    rankDiv.innerHTML = `<h3>上司タイプランキング</h3>
+        1位: ${topTypes[0].name} ${topTypes[0].icon}<br>
+        2位: ${topTypes[1].name} ${topTypes[1].icon}<br>
+        3位: ${topTypes[2].name} ${topTypes[2].icon}`;
+    container.appendChild(rankDiv);
+
+    // 詳細表示
+    topTypes.forEach(type => {
+        const div = document.createElement('div');
+        div.className = 'type';
+        div.innerHTML = `
+            <h2>${type.name} ${type.icon}</h2>
+            <p><strong>キャッチフレーズ：</strong>${type.catchphrase}</p>
+            <p>${type.description}</p>
+            <p><strong>バイアス：</strong>${type.bias}</p>
+        `;
+        container.appendChild(div);
+    });
+
+    // チャート作成
+// チャート作成
+const chartWrapper = document.createElement('div');
+chartWrapper.style.width = '100%';
+chartWrapper.style.height = '400px'; // これが重要
+container.appendChild(chartWrapper);
+
+const chartCanvas = document.createElement('canvas');
+chartWrapper.appendChild(chartCanvas);
+
+const ctx = chartCanvas.getContext('2d');
+
+new Chart(ctx, {
+    type: 'radar',
+    data: {
+        labels: ['過信度','責任回避','現実歪曲','感情制御','指示明確度','支援度'],
+        datasets: topTypes.map(type => ({
+            label: type.name,
+            data: [
+                type.id*1.5,
+                type.score/3,
+                Math.min(10, type.score/2),
+                Math.max(0, 10-type.score/3),
+                Math.max(0,15-type.id),
+                Math.max(0,10-type.score/2)
+            ],
+            backgroundColor: `rgba(${20*type.id},${100+10*type.id},150,0.2)`,
+            borderColor: `rgba(${20*type.id},${100+10*type.id},150,1)`,
+            borderWidth: 2,
+            pointBackgroundColor: `rgba(${20*type.id},${100+10*type.id},150,1)`
+        }))
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            r: {
+                beginAtZero: true,
+                max: 10,
+                ticks: { stepSize: 2, color: '#fff' },
+                pointLabels: {
+                    color: '#fff',
+                    font: { size: 12 },
+                    callback: function(label) { return label; } // 安全策
+                }
+            }
+        },
+        plugins: {
+            legend: { display: true, position: 'bottom', labels: { color: '#fff' } },
+            tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.raw.toFixed(1)}/10` } }
+        }
+    }
+});
+}
+
+getResults();
+</script>
+</body>
+</html>

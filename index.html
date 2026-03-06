@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>職場・上司の病理診断 | 質問</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+/* 既存スタイルをそのままコピー */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+    font-family: 'Inter', -apple-system, sans-serif; 
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    min-height: 100vh; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    overflow-x: hidden;
+}
+.glass { 
+    background: rgba(255,255,255,0.25); 
+    backdrop-filter: blur(20px); 
+    border-radius: 30px; 
+    padding: 40px; 
+    box-shadow: 0 25px 45px rgba(0,0,0,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    max-width: 500px; 
+    width: 90%; 
+    animation: slideIn 0.8s ease-out;
+}
+@keyframes slideIn { from { opacity: 0; transform: translateY(50px); } }
+h1 { 
+    background: linear-gradient(45deg, #fff, #f0f0f0); 
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent;
+    font-size: 2.2em; font-weight: 800; text-align: center; margin-bottom: 10px;
+}
+.subtitle { color: rgba(255,255,255,0.9); text-align: center; margin-bottom: 30px; }
+.progress { 
+    background: rgba(255,255,255,0.2); 
+    height: 8px; border-radius: 10px; 
+    margin-bottom: 30px; overflow: hidden;
+}
+.progress-bar { 
+    height: 100%; 
+    background: linear-gradient(90deg, #ff6b6b, #feca57, #48bb78); 
+    width: 0%; 
+    transition: width 0.5s ease;
+}
+.question { 
+    font-size: 1.1em; 
+    color: white; 
+    line-height: 1.6; 
+    margin-bottom: 30px; 
+    text-align: center;
+    font-weight: 500;
+}
+.options { display: flex; flex-direction: column; gap: 15px; }
+.option { 
+    background: rgba(255,255,255,0.15); 
+    backdrop-filter: blur(10px);
+    padding: 20px; 
+    border-radius: 20px; 
+    cursor: pointer; 
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white; 
+    font-weight: 500;
+}
+.option:hover { 
+    background: rgba(255,255,255,0.3); 
+    transform: translateY(-5px); 
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+.option.selected { 
+    background: linear-gradient(45deg, #ff6b6b, #feca57); 
+    box-shadow: 0 20px 40px rgba(255,107,107,0.4);
+}
+.nav-buttons { display: flex; gap: 15px; margin-top: 40px; }
+.btn { 
+    flex: 1; 
+    padding: 18px; 
+    border: none; 
+    border-radius: 25px; 
+    font-size: 1.1em; 
+    font-weight: 600; 
+    cursor: pointer; 
+    transition: all 0.3s ease;
+}
+.btn-prev { background: rgba(255,255,255,0.2); color: white; }
+.btn-prev:hover { background: rgba(255,255,255,0.3); }
+.btn-next { background: linear-gradient(45deg, #48bb78, #38a169); color: white; }
+.btn-next:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(72,187,120,0.4); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+@media (max-width: 480px) { .glass { padding: 25px 20px; } h1 { font-size: 1.8em; } }
+</style>
+</head>
+<body>
+<div class="glass">
+    <h1>🧠 上司病理診断</h1>
+    <p class="subtitle">20問であなたの職場を簡易解析</p>
+    <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="question" id="questionText"></div>
+    <div class="options" id="options"></div>
+    <div class="nav-buttons">
+        <button class="btn btn-prev" id="prevBtn" onclick="prevQuestion()">前へ</button>
+        <button class="btn btn-next" id="nextBtn" onclick="nextQuestion()">次へ</button>
+    </div>
+</div>
+
+<script>
+const questions = [
+{q:"① 上司がミスをしました。上司の対応に近いのは？", opts:["改善策を出す","とりあえず謝る","誰かのせいにする","ミスを認めない"]},
+{q:"② 仕事で同じトラブルが繰り返し起きました。上司の対応に近いのは？", opts:["原因を分析する","また謝る","偶然また起きただけと言う","問題は存在しないと言う"]},
+{q:"③ 部下が問題を指摘した場合、上司の対応に近いのは？", opts:["検討する","気にしすぎと言う","チーム全体の問題と言う","性格の問題と言う"]},
+{q:"④ トラブルが起きた場合、上司の口癖に近いのは？", opts:["改善しよう","ごめん","皆で考えよう","そんな話あったっけ？"]},
+{q:"⑤ ミーティングで問題が生じました。上司の対応に近いのは？", opts:["原因を整理する","その場を収める","話題を変える","問題自体を否定"]},
+{q:"⑥ 上司の過去の発言について問題提起をしました。上司の対応に近いのは？", opts:["記録を確認する","少し修正する","誤解だったと言う","最初から違うことを言っていたと言う"]},
+{q:"⑦ トラブルが起きた場合、上司の対応に近いのは？", opts:["再発防止策を作る","謝罪する","誰かが対応するはずと言う","問題は誇張されていると言う"]},
+{q:"⑧ 部下の不満を言われた場合、上司の対応に近いのは？", opts:["改善点を探す","心配していると言う","忙しいと言う","性格の問題と言う"]},
+{q:"⑨ 部下が新しい提案をしました。上司の対応に近いのは？", opts:["話を聞く","微妙な顔をする","昔の方法を主張","最初からその案だったと言う"]},
+{q:"⑩ あなたから見て、上司の自信レベルは？", opts:["現実的である","やや自信過剰","根拠薄い自信がある","圧倒的自信がある"]},
+{q:"⑪ あなたから見て、上司の意思決定は？", opts:["明確","遅い","曖昧","よくわからない"]},
+{q:"⑫ トラブルが起きたときの責任の所在は？", opts:["明確","曖昧","チーム全員の責任","誰も責任を取らない"]},
+{q:"⑬ 部下が意見を言うと？", opts:["議論になる","軽く流される","空気を読むよう言われる","否定される"]},
+{q:"⑭ 上司が新しい環境・技術に対応する姿勢として近いのは？", opts:["積極的に学ぶ","様子見する","過去の経験で対応可能と言う","新しいことはリスクが高いと言う"]},
+{q:"⑮ 組織における部下の評価の軸は？", opts:["仕事の成果","印象","チームとの協調性","性格"]},
+{q:"⑯ 組織におけるミスの扱いは？", opts:["学習の機会を与える","仕方ないと切り替える","イレギュラー事件として切り替える","特に存在しない"]},
+{q:"⑰ 職場の雰囲気は？", opts:["オープン","やや遠慮気味","察する文化","攻撃的"]},
+{q:"⑱ 部下が改善案を提示すると？", opts:["検討される","保留される","先送りにされる","なかったことにされる"]},
+{q:"⑲ トラブルの原因について、上司の考えに近いのは？", opts:["まずは分析する","仕事や私生活の状況のせいにする","イレギュラーな事例として扱う","トラブルではなく誤解だとする"]},
+{q:"⑳ 同じトラブルについてこれまでの経験上？", opts:["構造的に防止されている","減っている","継続している","無かったことになっている"]}
+];
+
+let currentQ = 0;
+let answers = new Array(questions.length).fill(null);
+
+function init() { showQuestion(currentQ); document.getElementById('prevBtn').style.display = 'none'; }
+
+function showQuestion(i){
+    const q = questions[i];
+    document.getElementById('questionText').textContent = q.q;
+    const opts = document.getElementById('options');
+    opts.innerHTML = q.opts.map((opt,j)=>`<div class="option" onclick="selectOption(${j})">${opt}</div>`).join('');
+    const progress = ((i+1)/questions.length)*100;
+    document.getElementById('progressBar').style.width = progress+'%';
+    document.getElementById('prevBtn').style.display = i===0?'none':'flex';
+    document.getElementById('nextBtn').textContent = i===questions.length-1?'診断完了 → 結果ページへ':'次へ';
+    if(answers[i]!==null) document.querySelectorAll('.option')[answers[i]].classList.add('selected');
+}
+
+function selectOption(idx){
+    answers[currentQ]=idx;
+    document.querySelectorAll('.option').forEach(opt=>opt.classList.remove('selected'));
+    event.target.classList.add('selected');
+}
+
+function nextQuestion(){
+    if(answers[currentQ]===null){ alert('選択肢を選んでください'); return; }
+    if(currentQ===questions.length-1){
+        // 結果ページへ（全回答をBase64で渡す）
+        const data = btoa(JSON.stringify(answers));
+        window.location.href = `result.html?data=${data}`;
+    }else{ currentQ++; showQuestion(currentQ); }
+}
+
+function prevQuestion(){ currentQ--; showQuestion(currentQ); }
+
+init();
+</script>
+</body>
+</html>

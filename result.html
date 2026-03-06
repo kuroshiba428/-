@@ -62,6 +62,7 @@ canvas {
 </div>
 
 <script>
+<script>
 // ===== タイプ定義（省略せずコピー） =====
 const TYPES = [
 {id:1, name:"馬鹿の山マネージャー", catchphrase:"「俺が言ってるんだよ？」", icon:"🐒🏔", bias:`ダニング＝クルーガー効果（能力が低いほど自己評価が過大になる認知バイアス）`, description:`このタイプは、自信と実力のバランスが崩れており、能力より自己評価が大きく上回る傾向があります。
@@ -266,26 +267,23 @@ const typeMap = [
 ];
 
 
-    // 回答に応じてスコア加算
+   // 回答に応じてスコア加算
     data.forEach((answer, idx) => {
-        const addTypes = typeMap[idx][answer-1];
+        const addTypes = typeMap[idx][answer - 1];
         addTypes.forEach(typeId => {
-            scores[typeId-1] += 1;
+            scores[typeId - 1] += 1;
         });
     });
 
+    // 結果に基づいて上位3タイプを決定
+    const topTypes = scores
+        .map((score, idx) => ({...TYPES[idx], score}))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 3);
+
+    const container = document.getElementById('resultContainer');
 
     // 上位3タイプ表示
-    if (topTypes.length > 0) {
-        const rankDiv = document.createElement('div');
-        rankDiv.className = 'top-rank';
-        rankDiv.innerHTML = `<h3>上司タイプランキング</h3>
-            1位: ${topTypes[0].name} ${topTypes[0].icon || ''}<br>
-            2位: ${topTypes[1] ? topTypes[1].name + ' ' + topTypes[1].icon : '-'}<br>
-            3位: ${topTypes[2] ? topTypes[2].name + ' ' + topTypes[2].icon : '-'}`;
-        container.appendChild(rankDiv);
-
-      // 上位3タイプ表示
     if (topTypes.length > 0) {
         const rankDiv = document.createElement('div');
         rankDiv.className = 'top-rank';
@@ -366,5 +364,3 @@ window.onload = getResults;
 </script>
 </body>
 </html>
-
-

@@ -112,10 +112,20 @@ body {
     color: #333;
 }
 
-.card-content ul li span.text {
-    display: block;
+.card-content ul li span.text,
+.card-content ul li .text,
+.bias-display {
+    display: block !important;
     white-space: pre-line;
     margin-left: 24px;
+    width: 100%;
+    margin-top: 4px;
+}
+
+.explanation-text {
+    color: #444 !important;
+    line-height: 1.6 !important;
+    font-size: 0.95em !important;
 }
 .bias-display {
     margin-left: 24px;
@@ -317,13 +327,13 @@ TYPES.forEach((type, index) => {
             </div>
             <h3>${type.catchphrase}</h3>
             <ul>
-                <li>
-                    <div class="title-row">
-                        <span class="icon" style="background:${color}"></span>
-                        <span class="title">説明</span>
-                    </div>
-                    <span class="text">${type.description.replace(/\\n/g,"<br>")}</span>
-                </li>
+               <li class="explanation-li">
+    <div class="title-row">
+        <span class="icon" style="background:${color}"></span>
+        <span class="title">説明</span>
+    </div>
+    <span class="text explanation-text">${type.description.replace(/\n/g,"<br>")}</span>
+</li>
                 <li>
                     <div class="title-row">
                         <span class="icon" style="background:${color}"></span>
@@ -344,6 +354,7 @@ TYPES.forEach((type, index) => {
 </script>
 </body>
 </html>
+
 
 
 

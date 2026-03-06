@@ -147,7 +147,7 @@ gap: 15px;
     margin: 10px 0 5px 0;
     color: #fff;
 }
-span[style*="font-size:1.0em"] {
+span[style*="font-size:1.2em"] {
 font-size: 1.1em !important;
 }
     
@@ -560,10 +560,11 @@ topTypes.forEach(type => {
         <p><strong>${type.catchphrase}</strong></p>
         <p>${type.description}</p>
         <div style="background:linear-gradient(90deg,#ff6b6b,#feca57);padding:15px;border-radius:15px;margin:10px 0;">
-            <strong>🧠 ヤバさの構造分析：</strong><br>
-            <span style="font-size:1.0em;">${getBiasExplanation(type.bias)}</span><br>
-            <small style="opacity:0.9;">${type.bias.split('（')[1]?.replace('）','') || '詳細分析'}</small>
-        </div>
+             <strong style="font-size:1.2em;">🧠 ヤバさの構造分析：</strong>
+    　　<br>
+   　　　　　 <span style="font-size:1.0em;">${getBiasExplanation(type.bias)}</span><br>
+    <span style="font-size:1.0em; color:#fff;">${type.bias.split('（')[1]?.replace('）','') || '詳細分析'}</span>
+</div>
     `;
     container.appendChild(div);
 });
@@ -620,6 +621,7 @@ window.onload = getResults;
 </script>
 </body>
 </html>
+
 
 
 

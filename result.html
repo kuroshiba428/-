@@ -566,7 +566,7 @@ setTimeout(() => {
     new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: TYPES.map(t => t.name.slice(0,8)),  // アイコンなし
+          　labels: TYPES.map(t => t.name.slice(0,12)),  // アイコンなし
             datasets: [{
                 label: 'ヤバさスコア',
                 data: scores,
@@ -583,7 +583,14 @@ setTimeout(() => {
             indexAxis: 'y',  // 横グラフ
             scales: {
                 x: { beginAtZero: true, max: 20, ticks: { color: 'white', font: { size: 12 } }, grid: { color: 'rgba(255,255,255,0.1)' } },
-                y: { ticks: { color: 'white', maxRotation: 0, font: { size: 10 } } }
+                y: { 
+    ticks: { 
+        color: 'white', 
+        maxRotation: 0, 
+        font: { size: 11 },  // 少し小さく
+        padding: 10
+    } 
+}
             },
             plugins: {
                 legend: { labels: { color: 'white', font: { size: 14 } } }
@@ -598,6 +605,7 @@ window.onload = getResults;
 </script>
 </body>
 </html>
+
 
 
 

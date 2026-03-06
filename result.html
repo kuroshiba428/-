@@ -190,7 +190,6 @@ h1 {
     
 <script>
 function getBiasExplanation(biasFull) {
-    // 元の長いbiasから名前だけ抽出
     const biasNames = {
         "ダニング＝クルーガー効果（能力が低いほど自己評価が過大になる認知バイアス）": "ダニング＝クルーガー効果",
         "形式謝罪完結錯覚（謝罪＝「問題解決・責任終了」の魔法の言葉と思いこむ認知錯覚）": "形式謝罪完結錯覚",
@@ -208,10 +207,10 @@ function getBiasExplanation(biasFull) {
         "傍観者効果（誰かがやってくれるだろうと考え、個々の行動意欲が低下する心理現象）": "傍観者効果",
         "メタ認知機能（客観的に自分の状況を分析、把握する能力）": "メタ認知機能"
     };
-    return biasNames[biasFull] || biasFull.split('（')[0];
-}
-    return explanations[biasName] || "詳細な心理分析";
-}// ===== タイプ定義（省略せずコピー） =====
+    return biasNames[biasFull] || biasFull.split('（')[0] || "詳細な心理分析";
+}// ここで関数終了
+
+    ===== タイプ定義（省略せずコピー） =====
 const TYPES = [
 {id:1, name:"馬鹿の山マネージャー", catchphrase:"「俺が言ってるんだよ？」", icon:"🐒🏔", bias:`ダニング＝クルーガー効果（能力が低いほど自己評価が過大になる認知バイアス）`, description:`このタイプは、自信と実力のバランスが崩れており、能力より自己評価が大きく上回る傾向があります。
 
@@ -510,6 +509,7 @@ window.onload = getResults;
 </script>
 </body>
 </html>
+
 
 
 

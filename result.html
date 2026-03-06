@@ -179,7 +179,6 @@ const TYPES = [
 ];
 
 // ===== 質問回答解析 =====
-function<script>
 function getResults() {
     const params = new URLSearchParams(window.location.search);
     let data;
@@ -197,6 +196,7 @@ function getResults() {
         container.appendChild(msg);
         return;
     }
+
 
     // 1～4の範囲外を除外
     data = data.map(a => (a >= 1 && a <= 4 ? a : null));
@@ -274,13 +274,6 @@ const typeMap = [
         });
     });
 
-    // 結果に基づいて上位3タイプを決定
-    const topTypes = scores
-        .map((score, idx) => ({...TYPES[idx], score}))
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 3);
-
-    const container = document.getElementById('resultContainer');
 
     // 上位3タイプ表示
     if (topTypes.length > 0) {
@@ -292,7 +285,17 @@ const typeMap = [
             3位: ${topTypes[2] ? topTypes[2].name + ' ' + topTypes[2].icon : '-'}`;
         container.appendChild(rankDiv);
 
-                // 詳細表示
+      // 上位3タイプ表示
+    if (topTypes.length > 0) {
+        const rankDiv = document.createElement('div');
+        rankDiv.className = 'top-rank';
+        rankDiv.innerHTML = `<h3>上司タイプランキング</h3>
+            1位: ${topTypes[0].name} ${topTypes[0].icon || ''}<br>
+            2位: ${topTypes[1] ? topTypes[1].name + ' ' + topTypes[1].icon : '-'}<br>
+            3位: ${topTypes[2] ? topTypes[2].name + ' ' + topTypes[2].icon : '-'}`;
+        container.appendChild(rankDiv);
+
+        // 詳細表示
         topTypes.forEach(type => {
             const div = document.createElement('div');
             div.className = 'type';
@@ -319,7 +322,7 @@ const typeMap = [
             font-weight: 600;
         ">全15タイプ一覧ページを見る</a>`;
         container.appendChild(linkDiv);
-        
+
         // チャート作成
         const chartCanvas = document.createElement('canvas');
         chartCanvas.id = 'radarChart';
@@ -329,7 +332,7 @@ const typeMap = [
         new Chart(ctx, {
             type: 'radar',
             data: {
-                labels: ['過信度','責任回避','現実歪曲','感情制御','指示明確度','支援度'],
+                labels: ['過信度', '責任回避', '現実歪曲', '感情制御', '指示明確度', '支援度'],
                 datasets: topTypes.map((type, i) => ({
                     label: type.name,
                     data: [
@@ -348,9 +351,7 @@ const typeMap = [
             options: {
                 scales: {
                     r: {
-                        angleLines: {
-                            display: false
-                        },
+                        angleLines: { display: false },
                         suggestedMin: 0,
                         suggestedMax: 10
                     }
@@ -363,4 +364,7 @@ const typeMap = [
 // ページ読み込み時に結果を表示
 window.onload = getResults;
 </script>
+</body>
+</html>
+
 

@@ -536,14 +536,10 @@ container.appendChild(rankDiv);
     
    // タイプ詳細
 // 詳細表示
+// タイプ詳細（ランキングの下）
 topTypes.forEach(type => {
-        const div = document.createElement('div');
-chartDiv.className = 'chart-container';
-chartDiv.innerHTML = '<canvas id="scoreChart"></canvas>';
-container.appendChild(chartDiv);
-    
     const div = document.createElement('div');
-        div.className = 'type';
+    div.className = 'type';
     div.innerHTML = `
         <h2>${type.icon} ${type.name}</h2>
         <p><strong>${type.catchphrase}</strong></p>
@@ -555,6 +551,14 @@ container.appendChild(chartDiv);
         </div>
     `;
     container.appendChild(div);
+});
+
+// 👇 チャートはforEachの直後（1回だけ！）
+const chartDiv = document.createElement('div');
+chartDiv.className = 'chart-container';
+chartDiv.innerHTML = '<canvas id="scoreChart"></canvas>';
+container.appendChild(chartDiv);
+
 });
 
 
@@ -596,6 +600,7 @@ window.onload = getResults;
 </script>
 </body>
 </html>
+
 
 
 

@@ -125,6 +125,7 @@ gap: 15px;
     
 .type p {
     color: #000000 !important; /* 黒 */
+    white-space: pre-line; 
 }
 .type-icon { font-size: 2em; animation: bounce 2s infinite; }
 @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-10px); } 60% { transform: translateY(-5px); } }
@@ -281,8 +282,8 @@ const TYPES = [
 {id:2, name:"謝罪ボタン上司", catchphrase:"その謝罪、何回目？", icon:"🙇🙇", bias:`形式謝罪完結錯覚（謝罪＝「問題解決・責任終了」の魔法の言葉と思いこむ認知錯覚）`, description:`このタイプは、問題が起きると素早く謝罪しますが、改善行動が伴わないことが多いのが特徴です。
 
 結果として
-ミス → 謝罪 → 再発 → 謝罪
-というループが発生します。`},
+ミス → 謝罪 → 再発 → 謝罪というループが発生し、
+同じミスやトラブルが生じる場合があります。`},
 
     {id:3, name:"「大人な対応」上司", catchphrase:"もしかして：責任者　不在", icon:"👈👉", bias:`責任分散（集団の中で、それぞれの認識意識が薄れる心理）`, description:`このタイプは問題が発生した際、
 • チーム全体
@@ -574,6 +575,7 @@ window.onload = getResults;
 </script>
 </body>
 </html>
+
 
 
 

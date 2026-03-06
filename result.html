@@ -77,12 +77,11 @@ h1 {
 .rank-item:nth-child(2), 
 .rank-item:nth-child(3) { 
     color: #ffffff !important; /* 全員白文字 */
-    -webkit-text-stroke: 1px #000; 
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    -webkit-text-stroke: 1px #000; /* 縁取りのみ残す */
     font-family: inherit; /* フォント統一 */
 }
 
-/* 順位数字だけ少し大きく */
+/* 順位数字だけ少し大きく＋スペース */
 .rank-item span:first-child {
     margin-right: 1ch; /* 一文字分スペース */
     font-size: 1.3em;
@@ -538,6 +537,7 @@ window.onload = getResults;
 </script>
 </body>
 </html>
+
 
 
 

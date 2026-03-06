@@ -290,7 +290,20 @@ const typeMap = [
             `;
             container.appendChild(div);
         });
-
+const linkDiv = document.createElement('div');
+linkDiv.style.textAlign = 'center';
+linkDiv.style.marginTop = '30px';
+linkDiv.innerHTML = `<a href="types.html" style="
+    display: inline-block;
+    padding: 12px 20px;
+    background: linear-gradient(45deg, #48bb78, #38a169);
+    color: white;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+">全15タイプ一覧ページを見る</a>`;
+container.appendChild(linkDiv);
+        
         // チャート作成
         const chartCanvas = document.createElement('canvas');
         chartCanvas.id = 'radarChart';
@@ -336,3 +349,4 @@ window.onload = getResults;
 </script>
 </body>
 </html>
+

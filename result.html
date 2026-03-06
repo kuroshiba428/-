@@ -439,21 +439,29 @@ const typeMap = [
     const container = document.getElementById('resultContainer');
 
    // ランキング
-     const rankDiv = document.createElement('div');
-    rankDiv.className = 'top-rank';
-    rankDiv.innerHTML = `
-        <h3>🏆 上司タイプランキング</h3>
-        <div style="font-size:1.3em; font-weight:bold; color:#ffd700; margin:10px 0;">
-            1位: ${topTypes[0].name} ${topTypes[0].icon} (${topTypes[0].score}点)
-        </div>
-        <div style="color:#c0c0c0; margin:5px 0;">
-            2位: ${topTypes[1].name} ${topTypes[1].icon} (${topTypes[1].score}点)
-        </div>
-        <div style="color:#cd7f32; margin:5px 0;">
-            3位: ${topTypes[2].name} ${topTypes[2].icon} (${topTypes[2].score}点)
-        </div>
-    `;
-    container.appendChild(rankDiv);
+// 🚀 ランキング（一番上・濃い色）
+const rankDiv = document.createElement('div');
+rankDiv.className = 'top-rank';
+rankDiv.innerHTML = `
+    <h3>🏆 あなたの上司のタイプは</h3>
+    <div class="rank-item">
+        <span style="font-size:1.5em;">🥇 1位</span>
+        <span>${topTypes[0].name} ${topTypes[0].icon}</span>
+        <span style="margin-left:auto;font-size:1.4em;">${topTypes[0].score}点</span>
+    </div>
+    <div class="rank-item">
+        <span style="font-size:1.3em;">🥈 2位</span>
+        <span>${topTypes[1].name} ${topTypes[1].icon}</span>
+        <span style="margin-left:auto;">${topTypes[1].score}点</span>
+    </div>
+    <div class="rank-item">
+        <span style="font-size:1.3em;">🥉 3位</span>
+        <span>${topTypes[2].name} ${topTypes[2].icon}</span>
+        <span style="margin-left:auto;">${topTypes[2].score}点</span>
+    </div>
+`;
+container.appendChild(rankDiv);
+
     
    // タイプ詳細
 // 詳細表示
@@ -474,19 +482,18 @@ topTypes.forEach(type => {
 });
 
     // バーチャート（全タイプのスコア）
-    html += `
-        <div class="chart-container">
-            <canvas id="scoreChart"></canvas>
-        </div>`;
-
+const chartDiv = document.createElement('div');
+chartDiv.className = 'chart-container';
+chartDiv.innerHTML = '<canvas id="scoreChart"></canvas>';
+container.appendChild(chartDiv);
     // ナビゲーション
-    html += `
-        <div class="nav-links">
-            <a href="types.html" class="types-link">📋 全15タイプ一覧を見る</a>
-            <a href="index.html" class="restart-link">🔄 もう一度診断する</a>
-        </div>`;
-
-    container.innerHTML += html;
+const navDiv = document.createElement('div');
+navDiv.className = 'nav-links';
+navDiv.innerHTML = `
+    <a href="types.html" class="types-link">📋 全15タイプ一覧を見る</a>
+    <a href="index.html" class="restart-link">🔄 もう一度診断する</a>
+`;
+container.appendChild(navDiv);
 
     // バーチャート作成（全15タイプ）
 setTimeout(() => {
@@ -517,7 +524,7 @@ setTimeout(() => {
             }
         }
     });
-}, 100);
+}, 200);
 
 }
 
@@ -525,6 +532,7 @@ window.onload = getResults;
 </script>
 </body>
 </html>
+
 
 
 

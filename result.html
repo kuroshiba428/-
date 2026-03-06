@@ -181,39 +181,95 @@ const TYPES = [
 // ===== 質問回答解析 =====
 function getResults() {
     const params = new URLSearchParams(window.location.search);
-    let data;
+    const data = JSON.parse(atob(params.get('data'))); // 30問分の回答（1-4）
 
-    try {
-        const encodedData = params.get('data');
-        if (!encodedData) throw new Error('dataパラメータがありません');
-        data = JSON.parse(atob(encodedData));
-        if (!Array.isArray(data) || data.length !== 30) throw new Error('回答データが不正です');
-    } catch (e) {
-        const container = document.getElementById('resultContainer');
-        const msg = document.createElement('div');
-        msg.className = 'message';
-        msg.textContent = '⚠️ 診断データが見つからないか不正です。もう一度テストを行ってください。';
-        container.appendChild(msg);
-        return;
-    }
+     let scores = Array(TYPES.length).fill(0);
+    
+    // 簡易計算例：各回答をタイプに加点（ここは工夫可能）
+ // 各質問の回答ごとにどのタイプに点を加えるか
+// 1-4 = 選択肢番号、配列内の数字 = TYPES配列のID
+const typeMap = [
+  // ① 上司がミスをしました
+  [[1,8],[2],[5,9],[4]],
+  // ② 仕事で同じトラブルが繰り返し
+  [[1,6],[2],[6,3],[4,10]],
+  // ③ 部下が問題を指摘
+  [[3],[5],[3,6],[5,13]],
+  // ④ トラブルが起きた場合の口癖
+  [[1],[2],[3],[4]],
+  // ⑤ ミーティングで問題
+  [[1,8],[2],[4],[5]],
+  // ⑥ 過去の発言問題提起
+  [[4],[2],[3],[4,10]],
+  // ⑦ トラブルが起きた場合
+  [[1,8],[2],[3,6],[4,10]],
+  // ⑧ 部下の不満
+  [[3],[7],[12],[5]],
+  // ⑨ 新しい提案
+  [[3,15],[7],[10],[4]],
+  // ⑩ 上司の自信レベル
+  [[1],[1,2],[9],[15]],
+  // ⑪ 意思決定
+  [[15],[10],[3,11],[4]],
+  // ⑫ 責任の所在
+  [[15],[3],[3,6],[4]],
+  // ⑬ トラブル原因
+  [[1],[6],[3,6],[4]],
+  // ⑭ 部下評価の軸
+  [[15],[5],[3],[5]],
+  // ⑮ ミスの扱い
+  [[15],[2],[6],[4]],
+  // ⑯ 過去の失敗
+  [[1,10],[2],[6],[4]],
+  // ⑰ 組織の問題処理
+  [[1,8],[2],[3,6],[4]],
+  // ⑱ 部下への態度
+  [[15],[7],[12],[5]],
+  // ⑲ 部下が意見
+  [[15],[7],[11],[5,13]],
+  // ⑳ 改善案提示
+  [[15],[7],[12],[4]],
+  // ㉑ ミーティングの特徴
+  [[15],[7],[3,6],[5,13]],
+  // ㉒ 上司の説明
+  [[15],[7],[3],[4]],
+  // ㉓ 上司の成功談
+  [[15],[2],[10],[4]],
+  // ㉔ 同じトラブルの経験
+  [[1,6],[2],[6,3],[4]],
+  // ㉕ 上司の決断
+  [[15],[10],[3],[4]],
+  // ㉖ 上司の謝罪
+  [[15],[2],[9],[4]],
+  // ㉗ 職場の雰囲気
+  [[15],[7],[11],[5]],
+  // ㉘ 新しい環境・技術対応
+  [[15],[7],[10],[4]],
+  // ㉙ 指示がわかりにくいと伝えた時
+  [[15],[11],[12],[4]],
+  // ㉚ 判断ミス指摘時
+  [[1],[2],[9],[5]]
+];
 
-    // 1～4の範囲外を除外
-    data = data.map(a => (a >=1 && a <=4 ? a : null));
 
-    let scores = Array(TYPES.length).fill(0);
+    // 回答に応じてスコア加算
+    data.forEach((answer, idx) => {
+        const addTypes = typeMap[idx][answer-1];
+        addTypes.forEach(typeId => {
+            scores[typeId-1] += 1;
+        });
+    });
 
-    // typeMap の処理（省略可能）
-    // ...スコア計算のコードをここに入れる...
-
+    // 結果に基づいて上位3タイプを決定
     const topTypes = scores
         .map((score, idx) => ({...TYPES[idx], score}))
-        .sort((a,b) => b.score - a.score)
-        .slice(0,3);
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 3);
 
     const container = document.getElementById('resultContainer');
 
     // 上位3タイプ表示
-    if(topTypes.length > 0){
+    if (topTypes.length > 0) {
         const rankDiv = document.createElement('div');
         rankDiv.className = 'top-rank';
         rankDiv.innerHTML = `<h3>上司タイプランキング</h3>
@@ -245,56 +301,38 @@ function getResults() {
             type: 'radar',
             data: {
                 labels: ['過信度','責任回避','現実歪曲','感情制御','指示明確度','支援度'],
-                datasets: topTypes.map((type,i) => ({
+                datasets: topTypes.map((type, i) => ({
                     label: type.name,
                     data: [
-                        Math.min(10,type.id*1.5),
-                        Math.min(10,type.score/3),
-                        Math.min(10,type.score/2),
-                        Math.min(10,10-type.score/3),
-                        Math.min(10,15-type.id),
-                        Math.min(10,10-type.score/2)
+                        Math.min(10, type.id * 1.5),
+                        Math.min(10, type.score / 3),
+                        Math.min(10, type.score / 2),
+                        Math.min(10, 10 - type.score / 3),
+                        Math.min(10, 15 - type.id),
+                        Math.min(10, 10 - type.score / 2)
                     ],
-                    backgroundColor: `rgba(${30*(i+1)},${100+10*(i+1)},150,0.2)`,
-                    borderColor: `rgba(${30*(i+1)},${100+10*(i+1)},150,1)`,
-                    borderWidth: 2,
-                    pointBackgroundColor: `rgba(${30*(i+1)},${100+10*(i+1)},150,1)`
+                    backgroundColor: `rgba(${30 * (i + 1)}, ${100 + 10 * (i + 1)}, 150, 0.2)`,
+                    borderColor: `rgba(${30 * (i + 1)}, ${100 + 10 * (i + 1)}, 150, 1)`,
+                    borderWidth: 1
                 }))
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
                 scales: {
                     r: {
-                        beginAtZero: true,
-                        max: 10,
-                        ticks: { stepSize: 2, color: '#fff' },
-                        pointLabels: { color: '#fff', font: { size: 12 } }
+                        angleLines: {
+                            display: false
+                        },
+                        suggestedMin: 0,
+                        suggestedMax: 10
                     }
-                },
-                plugins: {
-                    legend: { display: true, position: 'bottom' },
-                    tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.raw.toFixed(1)}/10` } }
                 }
             }
         });
     }
-
-    // 上位3タイプ表示の後にリンクを追加
-    const linkDiv = document.createElement('div');
-    linkDiv.style.textAlign = 'center';
-    linkDiv.style.marginTop = '30px';
-    linkDiv.innerHTML = `<a href="types.html" style="
-        display:inline-block;
-        padding:12px 20px;
-        background: linear-gradient(45deg,#48bb78,#38a169);
-        color:white;
-        border-radius:25px;
-        text-decoration:none;
-        font-weight:600;
-    ">全15タイプ一覧ページを見る</a>`;
-    container.appendChild(linkDiv);
 }
 
-// 1回だけ関数を呼ぶ
-getResults();
+// ページ読み込み時に結果を表示
+window.onload = getResults;
+</script>
+</body>
+</html>

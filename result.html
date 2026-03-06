@@ -3,131 +3,165 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ヤバ上司診断　5分でわかるヤバ上司の病理 | 結果</title>
+<title>ヤバ上司診断 | 結果</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 body {
     font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background: linear-gradient(135deg, #ff6b6b 0%, #feca57 25%, #48bb78 50%, #4facfe 75%, #a55eea 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease infinite;
     min-height: 100vh;
     display: flex;
     justify-content: center;
     padding: 20px;
     color: white;
 }
+@keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
 .container {
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(20px);
-    border-radius: 30px;
-    padding: 20px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(25px);
+    border-radius: 40px;
+    padding: 30px;
     max-width: 700px;
     width: 100%;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.2);
 }
 
 h1 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
+    font-size: 2.8em;
+    text-align: center;
+    margin-bottom: 10px;
+    background: linear-gradient(45deg, #fff, #f0f0f0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+@keyframes glow { from { text-shadow: 0 0 10px rgba(255,255,255,0.5); } to { text-shadow: 0 0 30px rgba(255,255,255,0.8); } }
+
+.top-rank {
+    background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+    border-radius: 25px;
+    padding: 25px;
+    margin-bottom: 25px;
+    position: relative;
+    overflow: hidden;
+}
+.top-rank::before {
+    content: '🏆';
+    position: absolute;
+    font-size: 3em;
+    top: -20px;
+    right: -20px;
+    opacity: 0.3;
+}
+.top-rank h3 {
+    margin: 0 0 20px 0;
+    font-size: 1.5em;
     text-align: center;
 }
 
-.top-rank {
-    background: rgba(255,255,255,0.25);
-    border-radius: 20px;
-    padding: 15px;
-    margin-bottom: 20px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-.top-rank h3 {
-    margin: 5px 0;
-    font-size: 1.3em;
+.rank-item {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    padding: 10px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 15px;
+    font-size: 1.2em;
     font-weight: 700;
 }
+.rank-item:nth-child(1) { color: #ffd700; }
+.rank-item:nth-child(2) { color: #c0c0c0; }
+.rank-item:nth-child(3) { color: #cd7f32; }
 
 .type {
-    background: rgba(255,255,255,0.2);
-    border-radius: 20px;
-    padding: 15px;
-    margin-bottom: 20px;
-    white-space: pre-wrap;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+    border-radius: 25px;
+    padding: 25px;
+    margin-bottom: 25px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
+.type:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
 .type h2 {
-    margin-bottom: 8px;
-    font-size: 1.2em;
+    font-size: 1.6em;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.type-icon { font-size: 2em; animation: bounce 2s infinite; }
+@keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-10px); } 60% { transform: translateY(-5px); } }
+
+.psych-analysis {
+    background: linear-gradient(90deg, #ff6b6b, #feca57);
+    padding: 15px 20px;
+    border-radius: 20px;
+    margin: 20px 0;
+    font-weight: 700;
+    font-size: 1.1em;
+    box-shadow: 0 10px 25px rgba(255,107,107,0.3);
 }
 
-.type .catchphrase {
-    font-size: 1.5em;
-    font-style: italic;
-    margin-top: 10px;
-    color: #f8f8f8;
-}
-
-.type p {
-    margin-top: 5px;
-    font-size: 0.95em;
-    line-height: 1.5;
-}
-
-.type .bias {
-    font-weight: 600;
-    margin-top: 15px;
+.description {
+    line-height: 1.7;
     font-size: 1em;
 }
 
-canvas {
-    margin-top: 20px;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.1);
-    width: 100%;
-    max-height: 400px;
-    display: block;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+.chart-container {
+    background: rgba(0,0,0,0.2);
+    border-radius: 25px;
+    padding: 20px;
+    margin: 25px 0;
 }
+
+.nav-links {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+}
+.nav-links a {
+    padding: 15px 30px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 1.1em;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.types-link {
+    background: linear-gradient(45deg, #ed8936, #dd6b20);
+}
+.types-link:hover { transform: scale(1.05); }
+.restart-link {
+    background: linear-gradient(45deg, #48bb78, #38a169);
+}
+.restart-link:hover { transform: scale(1.05); }
 
 .message {
     text-align: center;
-    padding: 50px 20px;
-    font-size: 1.1em;
-    background: rgba(0,0,0,0.3);
-    border-radius: 20px;
-    margin-top: 30px;
-}
-
-a {
-    color: white;
-    text-decoration: none;
-    display: inline-block;
-    padding: 12px 20px;
-    background: linear-gradient(45deg, #48bb78, #38a169);
+    padding: 60px 30px;
+    font-size: 1.2em;
+    background: rgba(0,0,0,0.4);
     border-radius: 25px;
-    font-weight: 600;
-    text-align: center;
-    margin-top: 30px;
-}
-
-a:hover {
-    background: linear-gradient(45deg, #38a169, #48bb78);
-}
-
-@media (max-width: 768px) {
-    .container {
-        padding: 10px;
-    }
-
-    h1 {
-        font-size: 2em;
-    }
+    backdrop-filter: blur(10px);
 }
 </style>
 </head>
 <body>
 <div class="container" id="resultContainer">
-    <h1>🧠 診断結果</h1>
+    <h1>🎉 診断結果</h1>
 </div>
     
 <script>
@@ -350,80 +384,79 @@ const typeMap = [
 
     const container = document.getElementById('resultContainer');
 
-      // 上位3タイプ表示
-    if (topTypes.length > 0) {
-        const rankDiv = document.createElement('div');
-        rankDiv.className = 'top-rank';
-        rankDiv.innerHTML = `<h3>上司タイプランキング</h3>
-            1位: ${topTypes[0].name} ${topTypes[0].icon || ''}<br>
-            2位: ${topTypes[1] ? topTypes[1].name + ' ' + topTypes[1].icon : '-'}<br>
-            3位: ${topTypes[2] ? topTypes[2].name + ' ' + topTypes[2].icon : '-'}`;
-        container.appendChild(rankDiv);
+   // ランキング
+    let html = `
+        <div class="top-rank">
+            <h3>上司タイプランキング</h3>
+            ${topTypes.map((t, i) => `
+                <div class="rank-item">
+                    <span>${i+1}位</span>
+                    <span>${t.name} ${t.icon}</span>
+                    <span style="margin-left:auto;font-size:1.5em">${t.score}点</span>
+                </div>
+            `).join('')}
+        </div>`;
 
-        // 詳細表示
-        topTypes.forEach(type => {
-            const div = document.createElement('div');
-            div.className = 'type';
-            div.innerHTML = `
-                <h2>${type.name} ${type.icon || ''}</h2>
-                <div class="catchphrase">${type.catchphrase}</div>
-                <p>${type.description}</p>
-                <div class="bias"><strong>ヤバさの構造（心理・認知バイアス）：</strong> ${type.bias}</div>
-            `;
-            container.appendChild(div);
-        });
+    // タイプ詳細
+    topTypes.forEach(type => {
+        html += `
+            <div class="type">
+                <h2><span class="type-icon">${type.icon}</span>${type.name}</h2>
+                <div class="psych-analysis">🧠 ヤバさの心理分析: ${type.bias}</div>
+                <p class="description">${type.description}</p>
+            </div>`;
+    });
 
-        // 「全15タイプ一覧ページを見る」リンク
-        const linkDiv = document.createElement('div');
-        linkDiv.innerHTML = `<a href="types.html">全15タイプ一覧ページを見る</a>`;
-        container.appendChild(linkDiv);
+    // バーチャート（全タイプのスコア）
+    html += `
+        <div class="chart-container">
+            <canvas id="scoreChart"></canvas>
+        </div>`;
 
-        // チャート作成
-        const chartCanvas = document.createElement('canvas');
-        chartCanvas.id = 'radarChart';
-        chartCanvas.width = 400;
-        chartCanvas.height = 400;
-        container.appendChild(chartCanvas);
+    // ナビゲーション
+    html += `
+        <div class="nav-links">
+            <a href="types.html" class="types-link">📋 全15タイプ一覧を見る</a>
+            <a href="index.html" class="restart-link">🔄 もう一度診断する</a>
+        </div>`;
 
-        const ctx = chartCanvas.getContext('2d');
+    container.innerHTML += html;
+
+    // バーチャート作成（全15タイプ）
+    setTimeout(() => {
+        const ctx = document.getElementById('scoreChart').getContext('2d');
         new Chart(ctx, {
-            type: 'radar',
+            type: 'bar',
             data: {
-                labels: ['過信度', '責任回避', '現実歪曲', '感情制御', '指示明確度', '支援度'],
-                datasets: topTypes.map((type, i) => ({
-                    label: type.name,
-                    data: [
-                        Math.min(10, type.id * 1.5),
-                        Math.min(10, type.score / 3),
-                        Math.min(10, type.score / 2),
-                        Math.min(10, 10 - type.score / 3),
-                        Math.min(10, 15 - type.id),
-                        Math.min(10, 10 - type.score / 2)
-                    ],
-                    backgroundColor: `rgba(${30 * (i + 1)}, ${100 + 10 * (i + 1)}, 150, 0.2)`,
-                    borderColor: `rgba(${30 * (i + 1)}, ${100 + 10 * (i + 1)}, 150, 1)`,
-                    borderWidth: 1
-                }))
+                labels: TYPES.map(t => t.icon + ' ' + t.name.slice(0,8)),
+                datasets: [{
+                    label: 'ヤバさスコア',
+                    data: scores,
+                    backgroundColor: 'rgba(255, 107, 107, 0.8)',
+                    borderColor: 'rgba(255, 107, 107, 1)',
+                    borderWidth: 2,
+                    borderRadius: 10,
+                    borderSkipped: false,
+                }]
             },
             options: {
+                responsive: true,
                 scales: {
-                    r: {
-                        angleLines: { display: false },
-                        suggestedMin: 0,
-                        suggestedMax: 10
-                    }
+                    y: { beginAtZero: true, max: 20, ticks: { color: 'white' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                    x: { ticks: { color: 'white', maxRotation: 45 } }
+                },
+                plugins: {
+                    legend: { labels: { color: 'white', font: { size: 16 } } }
                 }
             }
         });
-    }
+    }, 100);
 }
 
-// ページ読み込み時に結果を表示
 window.onload = getResults;
 </script>
 </body>
 </html>
-
 
 
 

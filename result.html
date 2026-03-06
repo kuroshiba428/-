@@ -615,12 +615,21 @@ setTimeout(() => {
     });
 }, 200);
 
+    const navDiv = document.createElement('div');
+navDiv.className = 'nav-links';
+navDiv.innerHTML = `
+    <a href="types.html" class="types-link">📖 全タイプ一覧を見る</a>
+    <a href="index.html" class="restart-link">🔄 もう一度診断</a>
+`;
+container.appendChild(navDiv);
+    
 }
 
 window.onload = getResults;
 </script>
 </body>
 </html>
+
 
 
 

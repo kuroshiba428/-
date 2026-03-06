@@ -317,33 +317,35 @@ TYPES.forEach((type, index) => {
             </div>
             <h3>${type.catchphrase}</h3>
             <ul>
-// バイアス部分を修正
-<li>
-    <div class="title-row">
-        <span class="icon" style="background:${color}"></span>
-        <span class="title">ヤバ上司の病理🩺</span>
-    </div>
-    <div class="bias-display">
-        <span class="bias-name">${getBiasName(type.bias)}</span>
-        <span class="bias-desc">${getBiasDesc(type.bias)}</span>
-    </div>
-</li>
-
+                <!-- 👇 説明文LI（復活！） -->
                 <li>
                     <div class="title-row">
                         <span class="icon" style="background:${color}"></span>
-                        <span class="title">心理・認知バイアス</span>
+                        <span class="title">説明</span>
                     </div>
-                    <span class="text">${type.bias}</span>
+                    <span class="text">${type.description.replace(/\\n/g,"<br>")}</span>
+                </li>
+                <!-- 👇 病理LI（新規） -->
+                <li>
+                    <div class="title-row">
+                        <span class="icon" style="background:${color}"></span>
+                        <span class="title">ヤバ上司の病理🩺</span>
+                    </div>
+                    <div class="bias-display">
+                        <span class="bias-name">${getBiasName(type.bias)}</span>
+                        <span class="bias-desc">${getBiasDesc(type.bias)}</span>
+                    </div>
                 </li>
             </ul>
         </div>
     `;
     container.appendChild(card);
 });
+
 </script>
 </body>
 </html>
+
 
 
 

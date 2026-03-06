@@ -559,12 +559,12 @@ topTypes.forEach(type => {
         <h2>${type.icon} ${type.name}</h2>
         <p><strong>${type.catchphrase}</strong></p>
         <p>${type.description}</p>
-        <div style="background:linear-gradient(90deg,#ff6b6b,#feca57);padding:15px;border-radius:15px;margin:10px 0;">
-             <strong style="font-size:1.2em;">🧠 ヤバさの構造分析：</strong>
-    　　<br>
-   　　　　　 <span style="font-size:1.0em;">${getBiasExplanation(type.bias)}</span><br>
+      <div style="background:linear-gradient(90deg,#ff6b6b,#feca57);padding:15px;border-radius:15px;margin:10px 0;">
+    <strong style="font-size:1.2em;">🧠 ヤバさの構造分析：</strong><br>
+    <span style="font-size:1.0em; font-weight:bold;">${getBiasExplanation(type.bias)}</span><br>
     <span style="font-size:1.0em; color:#fff;">${type.bias.split('（')[1]?.replace('）','') || '詳細分析'}</span>
 </div>
+
     `;
     container.appendChild(div);
 });
@@ -621,6 +621,7 @@ window.onload = getResults;
 </script>
 </body>
 </html>
+
 
 
 

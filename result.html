@@ -195,15 +195,45 @@ gap: 15px;
     border-radius: 25px;
     backdrop-filter: blur(10px);
 }
- @media (max-width: 768px) {
+@media (max-width: 768px) {
+    /* ランキング改善 */
+    .top-rank {
+        padding: 20px 15px;
+    }
+    .rank-item {
+        flex-direction: column !important; /* 縦並び */
+        align-items: flex-start !important;
+        padding: 15px !important;
+        font-size: 1.1em !important;
+        gap: 8px;
+    }
+    .rank-item span:first-child {
+        margin-right: 0 !important; /* スペース削除 */
+        font-size: 1.4em !important;
+    }
+    .rank-item span:last-child {
+        display: none !important; /* 点数非表示 */
+    }
+    
+    /* タイプ名改行改善 */
+    .type h2 {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px;
+        font-size: 1.4em !important;
+    }
+    
+    /* チャート */
     .chart-container {
         padding: 10px !important;
         margin: 15px 0 !important;
+        height: 300px !important;
     }
     .chart-container canvas {
-        max-height: 300px !important;
+        max-height: 250px !important;
     }
 }
+
    
 </style>
 </head>
@@ -553,6 +583,7 @@ window.onload = getResults;
 </script>
 </body>
 </html>
+
 
 
 

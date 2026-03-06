@@ -73,18 +73,22 @@ h1 {
     font-size: 1.2em;
     font-weight: 700;
 }
-.rank-item:nth-child(1) { 
-    color: #ff0000 !important; /* 🔥 1位:鮮明赤 */
-    -webkit-text-stroke: 1px #fff; 
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-}
-.rank-item:nth-child(2) { 
-    color: #ffffff !important; /* 🥈 2位:白 */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-}
+.rank-item:nth-child(1), 
+.rank-item:nth-child(2), 
 .rank-item:nth-child(3) { 
-    color: #ff8c00 !important; /* 🥉 3位:濃いオレンジ */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    color: #ffffff !important; /* 全員白文字 */
+    -webkit-text-stroke: 1px #000; 
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    font-family: inherit; /* フォント統一 */
+}
+
+/* 順位数字だけ少し大きく */
+.rank-item span:first-child {
+    margin-right: 1ch; /* 一文字分スペース */
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
 
 .type {
     background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
@@ -446,21 +450,22 @@ rankDiv.className = 'top-rank';
 rankDiv.innerHTML = `
     <h3>🏆 あなたの上司のタイプは</h3>
     <div class="rank-item">
-        <span style="font-size:1.5em;">🥇 1位</span>
+        <span>🥇 1位</span>  <!-- スペースはCSSで -->
         <span>${topTypes[0].name} ${topTypes[0].icon}</span>
         <span style="margin-left:auto;font-size:1.4em;">${topTypes[0].score}点</span>
     </div>
     <div class="rank-item">
-        <span style="font-size:1.3em;">🥈 2位</span>
+        <span>🥈 2位</span>
         <span>${topTypes[1].name} ${topTypes[1].icon}</span>
         <span style="margin-left:auto;">${topTypes[1].score}点</span>
     </div>
     <div class="rank-item">
-        <span style="font-size:1.3em;">🥉 3位</span>
+        <span>🥉 3位</span>
         <span>${topTypes[2].name} ${topTypes[2].icon}</span>
         <span style="margin-left:auto;">${topTypes[2].score}点</span>
     </div>
 `;
+
 container.appendChild(rankDiv);
 
     
@@ -533,6 +538,7 @@ window.onload = getResults;
 </script>
 </body>
 </html>
+
 
 
 

@@ -532,27 +532,14 @@ topTypes.forEach(type => {
     container.appendChild(div);
 });
 
-    // バーチャート（全タイプのスコア）
-const chartDiv = document.createElement('div');
-chartDiv.className = 'chart-container';
-chartDiv.innerHTML = '<canvas id="scoreChart"></canvas>';
-container.appendChild(chartDiv);
-    // ナビゲーション
-const navDiv = document.createElement('div');
-navDiv.className = 'nav-links';
-navDiv.innerHTML = `
-    <a href="types.html" class="types-link">📋 全15タイプ一覧を見る</a>
-    <a href="index.html" class="restart-link">🔄 もう一度診断する</a>
-`;
-container.appendChild(navDiv);
 
-    // バーチャート作成（全15タイプ）
+// バーチャート作成（全15タイプ）→ 横棒グラフに変更
 setTimeout(() => {
     const ctx = document.getElementById('scoreChart').getContext('2d');
     new Chart(ctx, {
-        type: 'bar',
+        type: 'bar',  // 同じtype='bar'
         data: {
-            labels: TYPES.map(t => t.icon + ' ' + t.name.slice(0,6)),
+            labels: TYPES.map(t => t.name.slice(0,8)),  // 👈 アイコンなし＋短縮名
             datasets: [{
                 label: 'ヤバさスコア',
                 data: scores,
@@ -566,9 +553,17 @@ setTimeout(() => {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            indexAxis: 'y',  // 👈 これで横グラフ！
             scales: {
-                y: { beginAtZero: true, max: 20, ticks: { color: 'white', font: { size: 12 } }, grid: { color: 'rgba(255,255,255,0.1)' } },
-                x: { ticks: { color: 'white', maxRotation: 90, font: { size: 10 } } }
+                x: { 
+                    beginAtZero: true, 
+                    max: 20, 
+                    ticks: { color: 'white', font: { size: 12 } }, 
+                    grid: { color: 'rgba(255,255,255,0.1)' } 
+                },
+                y: { 
+                    ticks: { color: 'white', font: { size: 10 } } 
+                }
             },
             plugins: {
                 legend: { labels: { color: 'white', font: { size: 14 } } }
@@ -583,6 +578,7 @@ window.onload = getResults;
 </script>
 </body>
 </html>
+
 
 
 

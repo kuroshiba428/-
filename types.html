@@ -117,6 +117,26 @@ body {
     white-space: pre-line;
     margin-left: 24px;
 }
+.bias-display {
+    margin-left: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.bias-name {
+    font-weight: 700;
+    color: #e53e3e;
+    font-size: 1.05em;
+    display: block;
+}
+
+.bias-desc {
+    color: #666;
+    font-size: 0.95em;
+    line-height: 1.4;
+    white-space: pre-line;
+}
 
 @media (max-width:768px) {
     .type-title { font-size: 1em; }
@@ -128,6 +148,31 @@ body {
 <div class="container" id="container"></div>
 
 <script>
+    function getBiasName(biasFull) {
+    const biasNames = {
+        "ダニング＝クルーガー効果（能力が低いほど自己評価が過大になる認知バイアス）": "ダニング＝クルーガー効果",
+        "形式謝罪完結錯覚（謝罪＝「問題解決・責任終了」の魔法の言葉と思いこむ認知錯覚）": "形式謝罪完結錯覚",
+        "責任分散（集団の中で、それぞれの認識意識が薄れる心理）": "責任分散",
+        "認知的不協和（「できる自分」のイメージと合わない情報が受け入れられないから「現実」を変えてしまう心理）": "認知的不協和",
+        "根本的帰属の誤り（個人の性格の問題として整理し、本質（自分のマネジメント問題）に気づかない認知バイアス）": "根本的帰属の誤り",
+        "正常性バイアス（異常を「いつも通り」とみなし、深刻さが認められない認知バイアス）": "正常性バイアス",
+        "モラルライセンシング（良いことを言えば行動しなくても良いという自己免罪心理）": "モラルライセンシング",
+        "単純化バイアス（複雑な問題を処理したがらず、単純なものと扱ってしまう認知バイアス）": "単純化バイアス",
+        "防衛機制（自分の心を守るために、自分の非を認められない心理状況）": "防衛機制",
+        "アンカリング効果（過去のある成功に錨（いかり）を下ろし、それが判断基準として動かなくなってしまう認知バイアス）": "アンカリング効果",
+        "集団同調バイアス（周囲の期待や集団規範に合わせることを「当然」とし、明確な指示を出さず、結果として「察して」を強いる認知バイアス）": "集団同調バイアス",
+        "コントロール幻想（完璧主義や不安の結果、部下の行動を全て自分で管理できると錯覚し、過剰介入する認知バイアス）": "コントロール幻想",
+        "ホット・コグニション（論理的思考が感情にハイジャックされてしまい、冷静な判断ができない心理状態）": "ホット・コグニション",
+        "傍観者効果（誰かがやってくれるだろうと考え、個々の行動意欲が低下する心理現象）": "傍観者効果",
+        "メタ認知機能（客観的に自分の状況を分析、把握する能力）": "メタ認知機能"
+    };
+    return biasNames[biasFull] || biasFull.split('（')[0].replace(/^[「」""']+|['"「」]+$/g, '').trim();
+}
+
+function getBiasDesc(biasFull) {
+    return biasFull.split('（')[1]?.replace('）','') || '詳細分析';
+}
+
 const TYPE_COLORS = [
     "#e53e3e", "#ed8936", "#f6e05e", "#9f7aea", "#d53f8c",
     "#38a169", "#3182ce", "#dd6b20", "#805ad5", "#38b2ac",
@@ -272,13 +317,18 @@ TYPES.forEach((type, index) => {
             </div>
             <h3>${type.catchphrase}</h3>
             <ul>
-                <li>
-                    <div class="title-row">
-                        <span class="icon" style="background:${color}"></span>
-                        <span class="title">説明</span>
-                    </div>
-                    <span class="text">${type.description.replace(/\n/g,"<br>")}</span>
-                </li>
+// バイアス部分を修正
+<li>
+    <div class="title-row">
+        <span class="icon" style="background:${color}"></span>
+        <span class="title">ヤバ上司の病理🩺</span>
+    </div>
+    <div class="bias-display">
+        <span class="bias-name">${getBiasName(type.bias)}</span>
+        <span class="bias-desc">${getBiasDesc(type.bias)}</span>
+    </div>
+</li>
+
                 <li>
                     <div class="title-row">
                         <span class="icon" style="background:${color}"></span>
@@ -294,5 +344,6 @@ TYPES.forEach((type, index) => {
 </script>
 </body>
 </html>
+
 
 

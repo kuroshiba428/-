@@ -321,9 +321,11 @@ const typeMap = [
         container.appendChild(linkDiv);
 
         // チャート作成
-        const chartCanvas = document.createElement('canvas');
-        chartCanvas.id = 'radarChart';
-        container.appendChild(chartCanvas);
+　　　　const chartCanvas = document.createElement('canvas');
+　　　　chartCanvas.id = 'radarChart';
+　　　　chartCanvas.width = 400;  // ← これを追加
+　　　　chartCanvas.height = 400; // ← これを追加
+　　　　container.appendChild(chartCanvas);
 
         const ctx = chartCanvas.getContext('2d');
         new Chart(ctx, {
@@ -363,3 +365,4 @@ window.onload = getResults;
   </script>
 </body>
 </html>
+

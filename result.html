@@ -545,8 +545,8 @@ topTypes.forEach(type => {
         <p><strong>${type.catchphrase}</strong></p>
         <p>${type.description}</p>
         <div style="background:linear-gradient(90deg,#ff6b6b,#feca57);padding:15px;border-radius:15px;margin:10px 0;">
-            <strong>🧠 認知バイアス：</strong><br>
-            <span style="font-size:1.3em;">${getBiasExplanation(type.bias)}</span><br>
+            <strong>🧠 ヤバさの構造分析：</strong><br>
+            <span style="font-size:1.0 em;">${getBiasExplanation(type.bias)}</span><br>
             <small style="opacity:0.9;">${type.bias.split('（')[1]?.replace('）','') || '詳細分析'}</small>
         </div>
     `;
@@ -605,6 +605,7 @@ window.onload = getResults;
 </script>
 </body>
 </html>
+
 
 
 

@@ -60,10 +60,23 @@ h1 {
     font-size: 1.2em;
 }
 
+.type .catchphrase {
+    font-size: 1.5em;
+    font-style: italic;
+    margin-top: 10px;
+    color: #f8f8f8;
+}
+
 .type p {
     margin-top: 5px;
     font-size: 0.95em;
     line-height: 1.5;
+}
+
+.type .bias {
+    font-weight: 600;
+    margin-top: 15px;
+    font-size: 1em;
 }
 
 canvas {
@@ -337,7 +350,7 @@ const typeMap = [
 
     const container = document.getElementById('resultContainer');
 
-    // 上位3タイプ表示
+      // 上位3タイプ表示
     if (topTypes.length > 0) {
         const rankDiv = document.createElement('div');
         rankDiv.className = 'top-rank';
@@ -353,9 +366,9 @@ const typeMap = [
             div.className = 'type';
             div.innerHTML = `
                 <h2>${type.name} ${type.icon || ''}</h2>
-                <p><strong>キャッチフレーズ：</strong>${type.catchphrase}</p>
+                <div class="catchphrase">${type.catchphrase}</div>
                 <p>${type.description}</p>
-                <p><strong>バイアス：</strong>${type.bias}</p>
+                <div class="bias"><strong>ヤバさの構造（心理・認知バイアス）：</strong> ${type.bias}</div>
             `;
             container.appendChild(div);
         });
@@ -410,6 +423,7 @@ window.onload = getResults;
 </script>
 </body>
 </html>
+
 
 
 

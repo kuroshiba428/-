@@ -105,13 +105,26 @@
         
         <div class="question" id="questionText"></div>
         
-        <div class="options" id="options"></div>
-        
-        <div class="nav-buttons">
-            <button class="btn btn-prev" id="prevBtn" onclick="prevQuestion()">前へ</button>
-            <button class="btn btn-next" id="nextBtn" onclick="nextQuestion()">次へ</button>
-        </div>
-    </div>
+<!-- options の後、nav-buttons の**前** -->
+<div class="options" id="options"></div>
+
+<!-- ここにリンクを追加 -->
+<div style="text-align: center; margin: 30px 0;">
+    <a href="types.html" class="btn" style="
+        background: linear-gradient(45deg, #ed8936, #dd6b20);
+        color: white;
+        text-decoration: none;
+        padding: 15px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+    ">全15タイプ一覧を見る</a>
+</div>
+
+<!-- nav-buttons はそのまま -->
+<div class="nav-buttons">
+    <button class="btn btn-prev" id="prevBtn" onclick="prevQuestion()">前へ</button>
+    <button class="btn btn-next" id="nextBtn" onclick="nextQuestion()">次へ</button>
+</div>
 
     <script>
         // 全30問データ（省略版・実際は全30問）
@@ -210,3 +223,4 @@
     </script>
 </body>
 </html>
+

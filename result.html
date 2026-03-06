@@ -73,14 +73,14 @@ h1 {
     font-size: 1.2em;
     font-weight: 700;
 }
-.rank-item:nth-child(1), 
-.rank-item:nth-child(2), 
-.rank-item:nth-child(3) { 
-    color: #ffffff !important; /* 全員白文字 */
-    font-family: inherit; /* フォント統一 */
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
+.top-rank .rank-item:nth-child(1),
+.top-rank .rank-item:nth-child(2),
+.top-rank .rank-item:nth-child(3) { 
+    color: #ffffff !important;
+    font-family: inherit;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.9) !important;
 }
-
+    
 .rank-item span:first-child {
     margin-right: 1ch; /* 一文字分スペース */
     font-size: 1.3em;
@@ -547,6 +547,7 @@ window.onload = getResults;
 </script>
 </body>
 </html>
+
 
 
 

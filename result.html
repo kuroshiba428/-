@@ -105,18 +105,26 @@ h1 {
 }
 .type h2 {
     font-size: 1.6em;
-    color: #000000 !important;
+    background: linear-gradient(45deg, #ffffff, #f0f8ff, #e6e6fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
     margin-bottom: 15px;
     display: flex;
     align-items: center;
     gap: 15px;
 }
-type p strong {
-    display: inline; /* strongタグそのまま */
-    color: #444444 !important; /* 濃いグレー */
-    font-style: italic; /* 斜体 */
-    font-weight: normal; /* 太字解除 */
+    
+.type p strong {
+    display: inline;
+    color: #666666 !important; /* より濃いグレー */
+    font-style: italic;
+    font-weight: 500; /* 少し太さ残す */
+    font-size: 1.1em; /* 少し大きく */
+    letter-spacing: 0.5px; /* 文字間隔 */
 }
+    
 .type p {
     color: #000000 !important; /* 黒 */
 }
@@ -547,6 +555,7 @@ window.onload = getResults;
 </script>
 </body>
 </html>
+
 
 
 
